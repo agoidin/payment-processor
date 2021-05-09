@@ -1,47 +1,55 @@
 package com.payments.paymentprocessor.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "payments")
 public class Payment {
 
     @Id
-    @SequenceGenerator(
-            name = "payment_sequence",
-            sequenceName = "payment_sequence",
-            allocationSize = 1
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "payment_sequence"
-    )
-    private Long uuid;
+    @Column(name = "uuid", updatable = false, nullable = false)
+    private UUID uuid;
     private String debtorIban;
     private Double amount;
-    private LocalDateTime creationTime;
 
     public Payment() { }
 
-    public Payment(Long uuid, String debtorIban, Double amount, LocalDateTime creationTime) {
+
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
+    @CreationTimestamp
+//    @DateTimeFormat(pattern="dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime creationTime;
+
+    public Payment(UUID uuid, String debtorIban, Double amount) {
         this.uuid = uuid;
         this.debtorIban = debtorIban;
         this.amount = amount;
-        this.creationTime = creationTime;
+//        this.creationTime = LocalDateTime.now();
     }
 
-    public Payment(String debtorIban, Double amount, LocalDateTime creationTime) {
+    public Payment(String debtorIban, Double amount) {
         this.debtorIban = debtorIban;
         this.amount = amount;
-        this.creationTime = creationTime;
+//        this.creationTime = LocalDateTime.now();
     }
 
-    public Long getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(Long uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -61,11 +69,11 @@ public class Payment {
         this.amount = amount;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
-    }
+//    public LocalDateTime getCreationTime() {
+//        return creationTime;
+//    }
+//
+//    public void setCreationTime() {
+//        this.creationTime = LocalDateTime.now();
+//    }
 }
