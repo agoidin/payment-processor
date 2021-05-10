@@ -1,9 +1,10 @@
 package com.payments.paymentprocessor.service;
 
+import com.payments.paymentprocessor.dto.PaymentDTO;
 import com.payments.paymentprocessor.entity.Payment;
-import com.payments.paymentprocessor.iban.CountyCodeChecker;
 import com.payments.paymentprocessor.iban.RegexChecker;
 import com.payments.paymentprocessor.repository.PaymentRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,35 +14,26 @@ import java.util.List;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository, ModelMapper modelMapper) {
         this.paymentRepository = paymentRepository;
+        this.modelMapper = modelMapper;
     }
 
     public List<Payment> getPayments() { return paymentRepository.findAll(); }
 
-    public void addNewPayment(Payment payment) {
-//         Check for amount greater than 0.0
-        if(payment.getAmount() <= 0) {
-            throw new IllegalStateException(
-                    "amount cannot be less or equal to 0.0"
-            );
-        }
+    public void addNewPayment(PaymentDTO paymentDTO) {
 
-        if(!RegexChecker.regexValid(payment.getDebtorIban())) {
+        /*if(!RegexChecker.regexValid(payment.getDebtorIban())) {
             throw new IllegalStateException(
                     "invalid account number format"
             );
-        }
+        }*/
 
-//        Check for IBAN country code
-        if(!CountyCodeChecker.validCode(payment.getDebtorIban())) {
-
-            throw new IllegalStateException(
-                    "only Baltic account numbers are supported"
-            );
-        }
+        Payment payment = new Payment();
+        modelMapper.map(paymentDTO, payment);
 
         paymentRepository.save(payment);
     }

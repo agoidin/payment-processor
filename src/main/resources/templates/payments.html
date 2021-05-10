@@ -4,16 +4,18 @@
     <link th:href="@{/style/main.css}" rel="stylesheet" />
 </head>
 <body>
-<form action="#" th:action="@{/}" th:object="${payment}" method="post">
+<form action="#" th:action="@{/payments}" th:object="${paymentDTO}" method="post">
     <p>IBAN:</p>
-    <p><input type="text" th:field="*{debtorIban}" /></p>
+    <p><input type="text" th:field="*{debtorIban}" th:errorClass="is-invalid"/></p>
     <p th:if="${#fields.hasErrors('debtorIban')}" th:errors="*{debtorIban}">debtorIban Error</p>
 
     <p>Amount:</p>
-    <p><input type="number" th:field="*{amount}" /></p>
+    <p><input type="number" th:field="*{amount}" th:errorClass="is-invalid"/></p>
     <p th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount Error</p>
 
     <p><button type="submit">Submit</button></p>
+
+    <p style="text-align: center; font-size: 2rem" th:if="${message}" th:text="${message}"></p>
 </form>
 <table id = "list">
     <thead>

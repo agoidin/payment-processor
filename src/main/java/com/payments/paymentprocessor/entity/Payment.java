@@ -71,4 +71,14 @@ public class Payment {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "uuid=" + uuid +
+                ", debtorIban='" + debtorIban + '\'' +
+                ", amount=" + amount +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
