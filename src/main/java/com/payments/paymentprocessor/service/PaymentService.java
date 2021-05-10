@@ -1,13 +1,18 @@
 package com.payments.paymentprocessor.service;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import com.payments.paymentprocessor.dto.PaymentDTO;
 import com.payments.paymentprocessor.entity.Payment;
+import com.payments.paymentprocessor.iban.CountyCodeChecker;
 import com.payments.paymentprocessor.iban.RegexChecker;
 import com.payments.paymentprocessor.repository.PaymentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
+import java.io.Reader;
 import java.util.List;
 
 @Service
@@ -26,15 +31,31 @@ public class PaymentService {
 
     public void addNewPayment(PaymentDTO paymentDTO) {
 
-        /*if(!RegexChecker.regexValid(payment.getDebtorIban())) {
-            throw new IllegalStateException(
-                    "invalid account number format"
-            );
-        }*/
-
         Payment payment = new Payment();
         modelMapper.map(paymentDTO, payment);
 
         paymentRepository.save(payment);
+    }
+
+    public void addNewPaymentsFromFile(Reader reader) {
+
+        // create csv bean reader
+        CsvToBean<PaymentDTO> csvToBean = new CsvToBeanBuilder(reader)
+                .withType(PaymentDTO.class)
+                .withIgnoreLeadingWhiteSpace(true)
+                .build();
+
+        // convert `CsvToBean` object to list of users
+        List<PaymentDTO> paymentsDTO = csvToBean.parse();
+
+        for (PaymentDTO paymentDTO: paymentsDTO) {
+            // Check for amount greater than 0.0
+            if( paymentDTO.getAmount() > 0 &&
+                CountyCodeChecker.validCode(paymentDTO.getDebtorIban()) &&
+                RegexChecker.regexValid(paymentDTO.getDebtorIban())) {
+
+                addNewPayment(paymentDTO);
+            }
+        }
     }
 }
