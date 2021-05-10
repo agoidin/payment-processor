@@ -1,7 +1,6 @@
 package com.payments.paymentprocessor.controller;
 
 import com.payments.paymentprocessor.dto.PaymentDTO;
-import com.payments.paymentprocessor.entity.Payment;
 import com.payments.paymentprocessor.iban.CountyCodeChecker;
 import com.payments.paymentprocessor.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +60,5 @@ public class PaymentController{
         redirectAttributes.addFlashAttribute("message", "Payment successfully added!");
 
         return "redirect:/payments";
-    }
-
-    @GetMapping("/payments/success")
-    public String showSuccessPage() {
-
-        return "success";
     }
 }

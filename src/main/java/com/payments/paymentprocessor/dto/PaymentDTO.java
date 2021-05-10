@@ -1,5 +1,7 @@
 package com.payments.paymentprocessor.dto;
 
+import com.opencsv.bean.CsvBindByName;
+
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -8,25 +10,28 @@ public class PaymentDTO {
 
     private UUID uuid;
 
+    @CsvBindByName(column = "amount")
+    @NotNull(message = "Enter amount")
+    private Double amount;
+
+    @CsvBindByName(column = "debtorIban")
     @NotBlank(message = "Enter debtor IBAN")
     @Pattern(regexp = "^[A-Z]{2}[0-9]{2}(?:[ ]?[0-9]{4}){4}(?:[ ]?[0-9]{1,2})?$", message = "IBAN format is invalid")
     private String debtorIban;
 
-    @NotNull(message = "Enter amount")
-    private Double amount;
     private LocalDateTime createdAt;
 
     public PaymentDTO() { }
 
-    public PaymentDTO(String debtorIban, Double amount) {
-        this.debtorIban = debtorIban;
+    public PaymentDTO(Double amount, String debtorIban) {
         this.amount = amount;
+        this.debtorIban = debtorIban;
     }
 
-    public PaymentDTO(UUID uuid, String debtorIban, Double amount, LocalDateTime createdAt) {
+    public PaymentDTO(UUID uuid, Double amount, String debtorIban, LocalDateTime createdAt) {
         this.uuid = uuid;
-        this.debtorIban = debtorIban;
         this.amount = amount;
+        this.debtorIban = debtorIban;
         this.createdAt = createdAt;
     }
 
@@ -39,20 +44,20 @@ public class PaymentDTO {
         this.uuid = uuid;
     }
 
-    public String getDebtorIban() {
-        return debtorIban;
-    }
-
-    public void setDebtorIban(String debtorIban) {
-        this.debtorIban = debtorIban;
-    }
-
     public Double getAmount() {
         return amount;
     }
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getDebtorIban() {
+        return debtorIban;
+    }
+
+    public void setDebtorIban(String debtorIban) {
+        this.debtorIban = debtorIban;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -67,8 +72,8 @@ public class PaymentDTO {
     public String toString() {
         return "PaymentDTO{" +
                 "uuid=" + uuid +
-                ", debtorIban='" + debtorIban + '\'' +
                 ", amount=" + amount +
+                ", debtorIban='" + debtorIban + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }

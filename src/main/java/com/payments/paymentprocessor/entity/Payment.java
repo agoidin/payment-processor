@@ -20,8 +20,8 @@ public class Payment {
     )
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
-    private String debtorIban;
     private Double amount;
+    private String debtorIban;
 
     @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     @CreationTimestamp
@@ -29,15 +29,15 @@ public class Payment {
 
     public Payment() { }
 
-    public Payment(UUID uuid, String debtorIban, Double amount) {
+    public Payment(UUID uuid, Double amount, String debtorIban) {
         this.uuid = uuid;
-        this.debtorIban = debtorIban;
         this.amount = amount;
+        this.debtorIban = debtorIban;
     }
 
-    public Payment(String debtorIban, Double amount) {
-        this.debtorIban = debtorIban;
+    public Payment(Double amount, String debtorIban) {
         this.amount = amount;
+        this.debtorIban = debtorIban;
     }
 
     public UUID getUuid() {
@@ -48,20 +48,20 @@ public class Payment {
         this.uuid = uuid;
     }
 
-    public String getDebtorIban() {
-        return debtorIban;
-    }
-
-    public void setDebtorIban(String debtorIban) {
-        this.debtorIban = debtorIban;
-    }
-
     public Double getAmount() {
         return amount;
     }
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getDebtorIban() {
+        return debtorIban;
+    }
+
+    public void setDebtorIban(String debtorIban) {
+        this.debtorIban = debtorIban;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -76,8 +76,8 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "uuid=" + uuid +
-                ", debtorIban='" + debtorIban + '\'' +
                 ", amount=" + amount +
+                ", debtorIban='" + debtorIban + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }
