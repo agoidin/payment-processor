@@ -16,8 +16,8 @@ public class PaymentProcessorApplication {
 	CommandLineRunner commandLineRunner(
 			PaymentRepository repository) {
 		return args -> {
-			repository.save(new Payment("EE1234", 15.0));
-			repository.save(new Payment("LV4321", 10.0));
+			repository.save(new Payment("EE356437904816712537", 15.0));
+			repository.save(new Payment("LV017367904816708337", 10.0));
 		};
 	}
 

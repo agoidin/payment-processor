@@ -1,0 +1,53 @@
+form {
+    width: 50%;
+    margin: auto;
+    font-size: 1rem;
+}
+
+form input {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid lightblue;
+}
+
+button {
+    background-color: lightblue;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 1rem auto 1rem auto;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+}
+
+#list {
+    width: 70%;
+    margin: auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+#list th, #list td {
+    padding: 8px;
+}
+
+#list th {
+    background-color: lightblue;
+    color: white;
+    height: 2rem;
+}
+
+#list tr {
+    height: 1.5rem;
+}
+
+#list tr:nth-child(even){
+    background-color: #f2f2f2
+}
+

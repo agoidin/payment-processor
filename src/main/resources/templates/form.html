@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/style/main.css}" rel="stylesheet" />
+</head>
+<body>
+<form action="#" th:action="@{/}" th:object="${payment}" method="post">
+    <p>IBAN:</p>
+    <p><input type="text" th:field="*{debtorIban}" /></p>
+    <p th:if="${#fields.hasErrors('debtorIban')}" th:errors="*{debtorIban}">debtorIban Error</p>
+
+    <p>Amount:</p>
+    <p><input type="number" th:field="*{amount}" /></p>
+    <p th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount Error</p>
+
+    <p><button type="submit">Submit</button></p>
+</form>
+<table id = "list">
+    <thead>
+    <tr>
+        <th>UUID</th>
+        <th>IBAN</th>
+        <th>Amount</th>
+        <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="paymentListElement : ${paymentList}">
+        <td><span th:text="${paymentListElement.uuid}"> UUID </span></td>
+        <td><span th:text="${paymentListElement.debtorIban}"> IBAN </span></td>
+        <td><span th:text="${paymentListElement.amount}"> Amount </span></td>
+        <td><span th:text="${paymentListElement.createdAt}"> Created At </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

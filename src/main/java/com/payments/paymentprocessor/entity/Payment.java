@@ -3,7 +3,6 @@ package com.payments.paymentprocessor.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,25 +23,21 @@ public class Payment {
     private String debtorIban;
     private Double amount;
 
-    public Payment() { }
-
-
     @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     @CreationTimestamp
-//    @DateTimeFormat(pattern="dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime creationTime;
+    private LocalDateTime createdAt;
+
+    public Payment() { }
 
     public Payment(UUID uuid, String debtorIban, Double amount) {
         this.uuid = uuid;
         this.debtorIban = debtorIban;
         this.amount = amount;
-//        this.creationTime = LocalDateTime.now();
     }
 
     public Payment(String debtorIban, Double amount) {
         this.debtorIban = debtorIban;
         this.amount = amount;
-//        this.creationTime = LocalDateTime.now();
     }
 
     public UUID getUuid() {
@@ -69,11 +64,11 @@ public class Payment {
         this.amount = amount;
     }
 
-//    public LocalDateTime getCreationTime() {
-//        return creationTime;
-//    }
-//
-//    public void setCreationTime() {
-//        this.creationTime = LocalDateTime.now();
-//    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
