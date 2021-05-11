@@ -37,10 +37,12 @@ CSV file example format:
 | 125.0  | EE839257977125372452 |
 
 All payments are also validated according to the rules in ***POST /Payments***  
+
+There is a file ***test-file.csv*** in a root directory used for testing. It contains correct and incorrect values (2/7 are correct).  
 P.S. Statistics on added entries shown in terminal
 
 ### Additional: Country by IP
-Once any of ***/Post*** called by the client, server tries get caller IP from ***X-Forwarded-For*** request header.  
+Once any of ***/Post*** called by the client, server tries to get the caller IP from ***X-Forwarded-For*** request header.  
 Using https://ip-api.com/ API, it gets the status of IP and if it is ***"success"***, then it returns country corresponding to client IP address.  
 With ***POST /Payments*** information is printed on the page after call, and with ***POST /Payment-form*** it is printed in terminal.
 
