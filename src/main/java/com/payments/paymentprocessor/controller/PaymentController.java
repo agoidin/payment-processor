@@ -2,6 +2,8 @@ package com.payments.paymentprocessor.controller;
 
 import com.payments.paymentprocessor.dto.PaymentDTO;
 import com.payments.paymentprocessor.iban.CountyCodeChecker;
+import com.payments.paymentprocessor.service.CountryByIPService;
+import com.payments.paymentprocessor.service.IPRequestService;
 import com.payments.paymentprocessor.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -21,10 +24,12 @@ import javax.validation.Valid;
 public class PaymentController{
 
     private final PaymentService paymentService;
+    private final IPRequestService ipRequestService;
 
     @Autowired
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, IPRequestService ipRequestService) {
         this.paymentService = paymentService;
+        this.ipRequestService = ipRequestService;
     }
 
     @GetMapping
@@ -36,7 +41,10 @@ public class PaymentController{
     }
 
     @PostMapping
-    public String addPayment(@Valid PaymentDTO paymentDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addPayment(@Valid PaymentDTO paymentDTO,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes,
+                             HttpServletRequest httpServletRequest) {
 
         // Check for amount greater than 0.0
         if(paymentDTO.getAmount() <= 0.0) {
@@ -56,8 +64,25 @@ public class PaymentController{
             return "payments";
         }
 
+        String clientIp = ipRequestService.getClientIP(httpServletRequest);
+
+        if(CountryByIPService.getRequestStatus(clientIp).equals("success")) {
+            redirectAttributes.addFlashAttribute(
+                    "ipMessage",
+                    "IP: " + clientIp + "\n" +
+                            "Request done from " + CountryByIPService.getRequestCountry(clientIp)
+            );
+
+        } else {
+            redirectAttributes.addFlashAttribute(
+                    "ipMessage",
+                    "IP: " + clientIp + "\n" +
+                            "Wasn't able to resolve the country by IP"
+            );
+        }
+
         paymentService.addNewPayment(paymentDTO);
-        redirectAttributes.addFlashAttribute("message", "Payment successfully added!");
+        redirectAttributes.addFlashAttribute("successMessage", "Payment successfully added!");
 
         return "redirect:/payments";
     }

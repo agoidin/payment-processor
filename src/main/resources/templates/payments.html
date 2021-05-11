@@ -15,7 +15,10 @@
 
     <p><button type="submit">Submit</button></p>
 
-    <p style="text-align: center; font-size: 2rem" th:if="${message}" th:text="${message}"></p>
+    <p style="text-align: center; font-size: 2rem" th:if="${successMessage}" th:text="${successMessage}"></p>
+
+    <p style="text-align: center; font-size: 1rem; padding: 1rem; border: 1px solid lightblue" th:if="${ipMessage}" th:text="${ipMessage}"></p>
+
 </form>
 <table id = "list">
     <thead>

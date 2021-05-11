@@ -48,14 +48,20 @@ public class PaymentService {
         // convert `CsvToBean` object to list of users
         List<PaymentDTO> paymentsDTO = csvToBean.parse();
 
+        int counter = 0;
         for (PaymentDTO paymentDTO: paymentsDTO) {
+
             // Check for amount greater than 0.0
             if( paymentDTO.getAmount() > 0 &&
                 CountyCodeChecker.validCode(paymentDTO.getDebtorIban()) &&
                 RegexChecker.regexValid(paymentDTO.getDebtorIban())) {
 
                 addNewPayment(paymentDTO);
+                counter++;
             }
         }
+        System.out.println(
+                "Successfully added from file " + counter + "/" + paymentsDTO.size() +  " payment entries"
+        );
     }
 }
