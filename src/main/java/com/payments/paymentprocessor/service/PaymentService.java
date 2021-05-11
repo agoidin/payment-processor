@@ -10,10 +10,10 @@ import com.payments.paymentprocessor.repository.PaymentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
 
 import java.io.Reader;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -28,6 +28,10 @@ public class PaymentService {
     }
 
     public List<Payment> getPayments() { return paymentRepository.findAll(); }
+
+    public List<Payment> getAllPaymentsByIBAN(String iban) {
+        return paymentRepository.getAllPaymentsByIBAN(iban);
+    }
 
     public void addNewPayment(PaymentDTO paymentDTO) {
 
@@ -61,7 +65,7 @@ public class PaymentService {
             }
         }
         System.out.println(
-                "Successfully added from file " + counter + "/" + paymentsDTO.size() +  " payment entries"
+                "Successfully added " + counter + "/" + paymentsDTO.size() +  " payment entries from file"
         );
     }
 }

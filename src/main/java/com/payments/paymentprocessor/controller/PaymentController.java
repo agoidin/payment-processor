@@ -10,37 +10,42 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping(path = "/payments")
+@RequestMapping
 public class PaymentController{
 
     private final PaymentService paymentService;
     private final IPRequestService ipRequestService;
 
     @Autowired
-    public PaymentController(PaymentService paymentService, IPRequestService ipRequestService) {
+    public PaymentController(PaymentService paymentService,
+                             IPRequestService ipRequestService) {
         this.paymentService = paymentService;
         this.ipRequestService = ipRequestService;
     }
 
-    @GetMapping
-    public String showAddPaymentsForm(@ModelAttribute PaymentDTO paymentDTO, Model model) {
-        model.addAttribute("paymentDTO", paymentDTO);
-        model.addAttribute("paymentList", paymentService.getPayments());
+    @GetMapping(value = {"/payments", "/payments/{debtorIban}"})
+    public String showAddPaymentsForm(@PathVariable(required = false) String debtorIban,
+                                      @ModelAttribute PaymentDTO paymentDTO,
+                                      Model model) {
+        if (debtorIban != null) {
+            model.addAttribute("paymentDTO", paymentDTO);
+            model.addAttribute("paymentList", paymentService.getAllPaymentsByIBAN(debtorIban));
+        } else {
+            model.addAttribute("paymentDTO", paymentDTO);
+            model.addAttribute("paymentList", paymentService.getPayments());
+        }
 
         return "payments";
     }
 
-    @PostMapping
+    @PostMapping("/payments")
     public String addPayment(@Valid PaymentDTO paymentDTO,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes,
