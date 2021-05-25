@@ -24,10 +24,10 @@ Adds a new payment entry. It accepts 2 mandatory fields:
 
 All payment entries automatically assigned with TimeStamp and UUID
 
-### GET /Payment-form
+### GET /Payment-files
 Provides a form for adding new payment entries in a bulk by choosing a *.csv* file
 
-### POST /Payment-form
+### POST /Payment-files
 Accepts CSV and adds payments to database.  
 CSV file example format:
 
